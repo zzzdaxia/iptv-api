@@ -74,6 +74,7 @@ def get_channel_items():
     user_source_file = resource_path(config.source_file)
     channels = defaultdict(lambda: defaultdict(list))
     whitelist = get_name_urls_from_file(constants.whitelist_path)
+    whitelist_urls = get_urls_from_file(constants.whitelist_path)
     whitelist_len = len(list(whitelist.keys()))
     if whitelist_len:
         print(f"Found {whitelist_len} channel in whitelist")
@@ -100,6 +101,12 @@ def get_channel_items():
                             if name in old_result[cate]:
                                 for info in old_result[cate][name]:
                                     if info:
+                                        try:
+                                            if info[3] == "important" and not any(
+                                                    url in info[0] for url in whitelist_urls):
+                                                continue
+                                        except:
+                                            pass
                                         pure_url = info[0].partition("$")[0]
                                         if pure_url not in urls:
                                             channels[cate][name].append(info)
