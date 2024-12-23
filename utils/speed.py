@@ -277,7 +277,7 @@ def sort_urls(name, data, logger=None):
             "resolution": resolution,
             "origin": origin
         }
-        if origin == "important":
+        if origin == "whitelist":
             filter_data.append(result)
             continue
         cache_key_match = re.search(r"cache:(.*)", url.partition("$")[2])
@@ -304,7 +304,7 @@ def sort_urls(name, data, logger=None):
 
     def combined_key(item):
         speed, origin = item["speed"], item["origin"]
-        if origin == "important":
+        if origin == "whitelist":
             return float("inf")
         else:
             return speed if speed is not None else float("-inf")

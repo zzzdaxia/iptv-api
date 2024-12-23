@@ -55,12 +55,12 @@ def get_channel_data_from_file(channels, file, use_old, whitelist):
                     category_dict[name] = []
                 if name in whitelist:
                     for whitelist_url in whitelist[name]:
-                        category_dict[name].append((whitelist_url, None, None, "important"))
+                        category_dict[name].append((whitelist_url, None, None, "whitelist"))
                 if use_old and url:
                     info = url.partition("$")[2]
                     origin = None
                     if info and info.startswith("!"):
-                        origin = "important"
+                        origin = "whitelist"
                     data = (url, None, None, origin)
                     if data not in category_dict[name]:
                         category_dict[name].append(data)
@@ -102,7 +102,7 @@ def get_channel_items():
                                 for info in old_result[cate][name]:
                                     if info:
                                         try:
-                                            if info[3] == "important" and not any(
+                                            if info[3] == "whitelist" and not any(
                                                     url in info[0] for url in whitelist_urls):
                                                 continue
                                         except:
@@ -460,9 +460,9 @@ def append_data_to_info_data(info_data, cate, name, data, origin=None, check=Tru
                 if pure_url in urls:
                     continue
                 if whitelist and check_url_by_keywords(url, whitelist):
-                    url_origin = "important"
+                    url_origin = "whitelist"
                 if (
-                        url_origin == "important"
+                        url_origin == "whitelist"
                         or (not check)
                         or (
                         check and check_url_ipv_type(pure_url) and not check_url_by_keywords(url, blacklist))
