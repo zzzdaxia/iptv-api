@@ -27,10 +27,10 @@
 - ⚠️ This update involves configuration changes. Refer to the latest `config/config.ini`. Workflow users need to copy
   the latest configuration to `user_config.ini`, and Docker users need to clear the old configuration mounted on the
   host.
-- ✨ Added compensation mechanism mode (open_supply) to control whether to enable the compensation mechanism. When the
+- ✨ Added compensation mechanism mode (`open_supply`) to control whether to enable the compensation mechanism. When the
   number of results meeting the conditions is insufficient, potentially available interfaces will be supplemented into
   the results.
-- ✨ Added support for modifying the server port through configuration (app_port).
+- ✨ Added support for modifying the server port through configuration (`app_port`).
 - ✨ Added ghgo.xyz CDN proxy acceleration.
 - ✨ Added comments to the config.ini configuration file (#704).
 - ✨ Updated offline data for hotel sources and multicast sources.
