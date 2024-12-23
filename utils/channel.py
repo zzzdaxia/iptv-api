@@ -456,10 +456,13 @@ def append_data_to_info_data(info_data, cate, name, data, origin=None, check=Tru
             if not url_origin:
                 continue
             if url:
-                pure_url = url.partition("$")[0]
-                if pure_url in urls:
+                url_partition = url.partition("$")
+                pure_url = url_partition[0]
+                url_info = url_partition[2]
+                white_info = url_info and url_info.startswith("!")
+                if (pure_url in urls) and not white_info:
                     continue
-                if whitelist and check_url_by_keywords(url, whitelist):
+                if white_info or (whitelist and check_url_by_keywords(url, whitelist)):
                     url_origin = "whitelist"
                 if (
                         url_origin == "whitelist"
