@@ -295,7 +295,8 @@ def sort_urls(name, data, logger=None):
                             )
                     except Exception as e:
                         print(e)
-                    if config.open_filter_speed and speed < config.min_speed:
+                    if (not config.open_supply and config.open_filter_speed and speed < config.min_speed) or (
+                            config.open_supply and delay is None):
                         continue
                     result["delay"] = delay
                     result["speed"] = speed
