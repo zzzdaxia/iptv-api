@@ -345,9 +345,7 @@ def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_fi
         if origin == "whitelist":
             return float("inf")
         else:
-            speed = speed if speed is not None else float("-inf")
-            resolution = get_resolution_value(resolution)
-            return speed + resolution
+            return (speed if speed is not None else float("-inf")) + get_resolution_value(resolution)
 
     filter_data.sort(key=combined_key, reverse=True)
     return [
