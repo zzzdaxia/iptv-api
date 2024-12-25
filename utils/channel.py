@@ -645,6 +645,7 @@ def write_channel_to_file(data, ipv6=False, callback=None):
             )
             write_content_into_txt(f"🕘️更新时间,#genre#", path, newline=False)
             write_content_into_txt(f"{update_time},{update_time_url}", path)
+            write_content_into_txt("", path)
         for cate, channel_obj in data.items():
             print(f"\n{cate}:", end=" ")
             write_content_into_txt(f"{cate},#genre#", path)

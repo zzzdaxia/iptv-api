@@ -35,12 +35,12 @@ async def get_speed_with_download(url: str, session: ClientSession = None, timeo
             async for chunk in response.content.iter_any():
                 if chunk:
                     total_size += len(chunk)
-    except Exception as e:
+    except:
         pass
     finally:
-        end_time = time()
-        total_time += end_time - start_time
-        info['speed'] = (total_size / total_time if total_time > 0 else 0) / 1024 / 1024
+        if total_size > 0:
+            total_time += time() - start_time
+            info['speed'] = ((total_size / total_time) if total_time > 0 else 0) / 1024 / 1024
         if created_session:
             await session.close()
         return info
@@ -127,7 +127,7 @@ async def get_speed_m3u8(url: str, filter_resolution: bool = config.open_filter_
     except:
         pass
     finally:
-        if filter_resolution:
+        if filter_resolution and info['delay'] is not None:
             info['resolution'] = await get_resolution_ffprobe(url, timeout)
         return info
 
