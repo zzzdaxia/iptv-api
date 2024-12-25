@@ -100,13 +100,13 @@ async def get_speed_m3u8(url: str, filter_resolution: bool = config.open_filter_
                     segments = m3u8_obj.segments
                     if not segments and playlists:
                         parsed_url = urlparse(url)
-                        url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path.rsplit('/', 1)[0]}/{playlists[0].get('uri', '')}"
-                        uri_headers = await get_m3u8_headers(url, session)
+                        uri = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path.rsplit('/', 1)[0]}/{playlists[0].get('uri', '')}"
+                        uri_headers = await get_m3u8_headers(uri, session)
                         if not check_m3u8_valid(uri_headers):
                             if uri_headers.get('Content-Length'):
-                                info.update(await get_speed_with_download(url, session, timeout))
+                                info.update(await get_speed_with_download(uri, session, timeout))
                             raise Exception("Invalid m3u8")
-                        m3u8_obj = m3u8.load(url, timeout=2)
+                        m3u8_obj = m3u8.load(uri, timeout=2)
                         segments = m3u8_obj.segments
                     if not segments:
                         raise Exception("Segments not found")
@@ -120,8 +120,7 @@ async def get_speed_m3u8(url: str, filter_resolution: bool = config.open_filter_
                         speed_list.append(download_info['speed'])
                         if info['delay'] is None and download_info['delay'] is not None:
                             info['delay'] = download_info['delay']
-                    info['speed'] = sum(speed_list) / len(speed_list) if speed_list else 0
-                    url = ts_urls[0]
+                    info['speed'] = (sum(speed_list) / len(speed_list)) if speed_list else 0
             elif headers.get('Content-Length'):
                 info.update(await get_speed_with_download(url, session, timeout))
     except:
@@ -206,17 +205,19 @@ async def get_resolution_ffprobe(url: str, timeout: int = config.sort_timeout) -
     resolution = None
     proc = None
     try:
-        probe_args = ["ffprobe", "-show_format", "-show_streams", "-of", "json", url]
-        proc = await asyncio.create_subprocess_exec(
-            *probe_args,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        out, err = await asyncio.wait_for(proc.communicate(), timeout)
-        if proc.returncode != 0:
-            raise Exception("FFprobe failed")
-        video_stream = json.loads(out.decode("utf-8"))["streams"][0]
-        resolution = f"{int(video_stream['width'])}x{int(video_stream['height'])}"
+        probe_args = [
+            'ffprobe',
+            '-v', 'error',
+            '-select_streams', 'v:0',
+            '-show_entries', 'stream=width,height',
+            "-of", 'json',
+            url
+        ]
+        proc = await asyncio.create_subprocess_exec(*probe_args, stdout=asyncio.subprocess.PIPE,
+                                                    stderr=asyncio.subprocess.PIPE)
+        out, _ = await asyncio.wait_for(proc.communicate(), timeout)
+        video_stream = json.loads(out.decode('utf-8'))["streams"][0]
+        resolution = f"{video_stream['width']}x{video_stream['height']}"
     except:
         if proc:
             proc.kill()
