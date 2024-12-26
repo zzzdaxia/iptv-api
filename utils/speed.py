@@ -299,7 +299,7 @@ async def get_speed(url, ipv6_proxy=None, filter_resolution=config.open_filter_r
 
 
 def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_filter_speed, min_speed=config.min_speed,
-              filter_resolution=config.open_filter_resolution, min_resolution=config.min_resolution,
+              filter_resolution=config.open_filter_resolution, min_resolution=config.min_resolution_value,
               logger=None):
     """
     Sort the urls with info
