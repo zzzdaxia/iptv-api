@@ -6,11 +6,21 @@ WORKDIR /app
 
 COPY Pipfile* ./
 
-RUN pip install -i https://mirrors.aliyun.com/pypi/simple pipenv
-
-RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy\
+RUN pip install pipenv \
+  && PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy \
   && if [ "$LITE" = False ]; then pipenv install selenium; fi
 
+RUN apt-get update && apt-get install -y --no-install-recommends wget tar xz-utils
+
+RUN mkdir /usr/bin-new \
+    && case "${TARGETPLATFORM}" in \
+         "linux/amd64") ARCH="amd64";; \
+         "linux/arm64") ARCH="arm64";; \
+         "linux/arm/v7") ARCH="armhf";; \
+         *) echo "Unsupported architecture"; exit 1;; \
+       esac \
+    && wget -O /tmp/ffmpeg.tar.gz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-${ARCH}-static.tar.xz \
+    && tar -xvf /tmp/ffmpeg.tar.gz -C /usr/bin-new/
 
 FROM python:3.13-slim
 
@@ -29,21 +39,12 @@ COPY . $APP_WORKDIR
 
 COPY --from=builder /app/.venv /.venv
 
-RUN echo "deb https://mirrors.aliyun.com/debian/ bookworm main contrib non-free non-free-firmware\n \
-  deb-src https://mirrors.aliyun.com/debian/ bookworm main contrib non-free non-free-firmware\n \
-  deb https://mirrors.aliyun.com/debian/ bookworm-updates main contrib non-free non-free-firmware\n \
-  deb-src https://mirrors.aliyun.com/debian/ bookworm-updates main contrib non-free non-free-firmware\n \
-  deb-src https://mirrors.aliyun.com/debian/ bookworm-updates main contrib non-free non-free-firmware\n \
-  deb https://mirrors.aliyun.com/debian/ bookworm-backports main contrib non-free non-free-firmware\n \
-  deb-src https://mirrors.aliyun.com/debian/ bookworm-backports main contrib non-free non-free-firmware\n \
-  deb https://mirrors.aliyun.com/debian-security/ bookworm-security main contrib non-free non-free-firmware\n \
-  deb-src https://mirrors.aliyun.com/debian-security/ bookworm-security main contrib non-free non-free-firmware\n" \
-  > /etc/apt/sources.list
+COPY --from=builder /usr/bin-new/* /usr/bin
 
-RUN apt-get update && apt-get install -y --no-install-recommends cron ffmpeg
-
-RUN if [ "$LITE" = False ]; then apt-get install -y --no-install-recommends chromium chromium-driver; fi \
-  && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends cron \
+  && if [ "$LITE" = False ]; then apt-get install -y --no-install-recommends chromium chromium-driver; fi \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN (crontab -l ; \
   echo "0 22 * * * cd $APP_WORKDIR && /.venv/bin/python main.py"; \
