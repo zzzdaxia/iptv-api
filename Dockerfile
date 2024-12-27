@@ -13,12 +13,7 @@ RUN pip install pipenv \
 RUN apt-get update && apt-get install -y --no-install-recommends wget tar xz-utils
 
 RUN mkdir /usr/bin-new \
-    && case "${TARGETPLATFORM}" in \
-         "linux/amd64") ARCH="amd64";; \
-         "linux/arm64") ARCH="arm64";; \
-         "linux/arm/v7") ARCH="armhf";; \
-         *) echo "Unsupported architecture"; exit 1;; \
-       esac \
+    && ARCH=$(dpkg --print-architecture) \
     && wget -O /tmp/ffmpeg.tar.gz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-${ARCH}-static.tar.xz \
     && tar -xvf /tmp/ffmpeg.tar.gz -C /usr/bin-new/
 
