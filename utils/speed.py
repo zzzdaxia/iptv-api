@@ -1,4 +1,5 @@
 import asyncio
+import http.cookies
 import json
 import re
 import subprocess
@@ -12,6 +13,8 @@ from multidict import CIMultiDictProxy
 import utils.constants as constants
 from utils.config import config
 from utils.tools import is_ipv6, remove_cache_info, get_resolution_value
+
+http.cookies._is_legal_key = lambda _: True
 
 
 async def get_speed_with_download(url: str, session: ClientSession = None, timeout: int = config.sort_timeout) -> dict[
