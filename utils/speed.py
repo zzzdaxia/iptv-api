@@ -30,8 +30,8 @@ async def get_speed_with_download(url: str, session: ClientSession = None, timeo
         created_session = False
     try:
         async with session.get(url, timeout=timeout) as response:
-            if response.status == 404:
-                raise Exception("404")
+            if response.status != 200:
+                raise Exception("Invalid response")
             info['delay'] = int(round((time() - start_time) * 1000))
             async for chunk in response.content.iter_any():
                 if chunk:
