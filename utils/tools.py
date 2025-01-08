@@ -11,6 +11,7 @@ from collections import defaultdict
 from logging.handlers import RotatingFileHandler
 from time import time
 
+import pytz
 import requests
 from bs4 import BeautifulSoup
 from flask import send_file, make_response
@@ -582,3 +583,12 @@ def get_name_urls_from_file(path: str) -> dict[str, list]:
                     if url not in name_urls[name]:
                         name_urls[name].append(url)
     return name_urls
+
+
+def get_datetime_now():
+    """
+    Get the datetime now
+    """
+    now = datetime.datetime.now()
+    time_zone = pytz.timezone(config.time_zone)
+    return now.astimezone(time_zone).strftime("%Y-%m-%d %H:%M:%S")

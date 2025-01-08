@@ -358,6 +358,18 @@ class DefaultUI:
         )
         self.ipv6_support_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
+        frame_time_zone = tk.Frame(root)
+        frame_time_zone.pack(fill=tk.X)
+
+        self.time_zone_label = tk.Label(
+            frame_time_zone, text="时区:", width=12
+        )
+        self.time_zone_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.time_zone_entry = tk.Entry(frame_time_zone, width=18)
+        self.time_zone_entry.pack(side=tk.LEFT, padx=4, pady=8)
+        self.time_zone_entry.insert(0, config.time_zone)
+        self.time_zone_entry.bind("<KeyRelease>", self.update_time_zone)
+
         frame_default_url_keywords = tk.Frame(root)
         frame_default_url_keywords.pack(fill=tk.X)
         frame_default_url_keywords_column1 = tk.Frame(frame_default_url_keywords)
@@ -444,6 +456,9 @@ class DefaultUI:
     def update_urls_limit(self, event):
         config.set("Settings", "urls_limit", self.urls_limit_entry.get())
 
+    def update_time_zone(self, event):
+        config.set("Settings", "time_zone", self.time_zone_entry.get())
+
     def update_open_update_time(self):
         config.set("Settings", "open_update_time", str(self.open_update_time_var.get()))
 
@@ -490,6 +505,7 @@ class DefaultUI:
             "request_timeout_entry",
             "source_file_entry",
             "source_file_button",
+            "time_zone_entry",
             "final_file_entry",
             "final_file_button",
             "open_keep_all_checkbutton",

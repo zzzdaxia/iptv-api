@@ -1,7 +1,6 @@
 import asyncio
 import base64
 import copy
-import datetime
 import os
 import pickle
 import re
@@ -31,6 +30,7 @@ from utils.tools import (
     get_urls_from_file,
     get_name_urls_from_file,
     get_logger,
+    get_datetime_now
 )
 
 
@@ -662,10 +662,6 @@ def write_channel_to_file(data, ipv6=False, callback=None):
                 write_content_into_txt(f"\n{name},url", path)
             print()
         if config.open_update_time:
-            now = datetime.datetime.now()
-            if os.environ.get("GITHUB_ACTIONS"):
-                now += datetime.timedelta(hours=8)
-            update_time = now.strftime("%Y-%m-%d %H:%M:%S")
             update_time_url = next(
                 (get_total_urls(info_list, ipv_type_prefer, origin_type_prefer)[0]
                  for channel_obj in data.values()
@@ -674,7 +670,7 @@ def write_channel_to_file(data, ipv6=False, callback=None):
             )
             update_time_position = config.update_time_position
             write_content_into_txt(
-                f"{'\n\n' if update_time_position == 'bottom' else ''}🕘️更新时间,#genre#\n{update_time},{update_time_url}{'\n' if update_time_position == 'top' else ''}",
+                f"{'\n\n' if update_time_position == 'bottom' else ''}🕘️更新时间,#genre#\n{get_datetime_now()},{update_time_url}{'\n' if update_time_position == 'top' else ''}",
                 path,
                 position=update_time_position)
     except Exception as e:

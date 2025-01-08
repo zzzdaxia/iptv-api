@@ -311,6 +311,10 @@ class ConfigManager:
     def update_time_position(self):
         return self.config.get("Settings", "update_time_position", fallback="top")
 
+    @property
+    def time_zone(self):
+        return self.config.get("Settings", "time_zone", fallback="Asia/Shanghai")
+
     def load(self):
         """
         Load the config
