@@ -191,6 +191,7 @@ https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/source.json
 | source_file            | 模板文件路径                                                                                                                                                | config/demo.txt   |
 | subscribe_num          | 结果中偏好的订阅源接口数量                                                                                                                                         | 10                |
 | urls_limit             | 单个频道接口数量                                                                                                                                              | 10                |
+| update_time_position   | 更新时间显示位置，需要开启 open_update_time 才能生效，可选值：top、bottom，top: 显示于结果顶部，bottom: 显示于结果底部                                                                       | top               |
 
 ## 快速上手
 

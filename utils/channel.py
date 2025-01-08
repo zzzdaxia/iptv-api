@@ -634,23 +634,11 @@ def write_channel_to_file(data, ipv6=False, callback=None):
         if any(pref in ipv_type_prefer for pref in ["自动", "auto"]) or not ipv_type_prefer:
             ipv_type_prefer = ["ipv6", "ipv4"] if ipv6 else ["ipv4", "ipv6"]
         origin_type_prefer = config.origin_type_prefer
-        if config.open_update_time:
-            now = datetime.datetime.now()
-            if os.environ.get("GITHUB_ACTIONS"):
-                now += datetime.timedelta(hours=8)
-            update_time = now.strftime("%Y-%m-%d %H:%M:%S")
-            update_time_url = next(
-                (get_total_urls(info_list, ipv_type_prefer, origin_type_prefer)[0]
-                 for channel_obj in data.values()
-                 for info_list in channel_obj.values() if info_list),
-                "url"
-            )
-            write_content_into_txt(f"🕘️更新时间,#genre#", path, newline=False)
-            write_content_into_txt(f"{update_time},{update_time_url}", path)
-            write_content_into_txt("", path)
+        first_cate = True
         for cate, channel_obj in data.items():
             print(f"\n{cate}:", end=" ")
-            write_content_into_txt(f"{cate},#genre#", path)
+            write_content_into_txt(f"{'\n\n' if not first_cate else ''}{cate},#genre#", path)
+            first_cate = False
             channel_obj_keys = channel_obj.keys()
             names_len = len(list(channel_obj_keys))
             for i, name in enumerate(channel_obj_keys):
@@ -663,17 +651,32 @@ def write_channel_to_file(data, ipv6=False, callback=None):
                         no_result_name.append(name)
                     continue
                 for url in channel_urls:
-                    write_content_into_txt(f"{name},{url}", path, callback=callback)
+                    write_content_into_txt(f"\n{name},{url}", path, callback=callback)
             print()
-            write_content_into_txt("", path)
         if open_empty_category and no_result_name:
             print("\n🈳 No result channel name:")
-            write_content_into_txt("🈳无结果频道,#genre#", path)
+            write_content_into_txt("\n\n🈳无结果频道,#genre#", path)
             for i, name in enumerate(no_result_name):
                 end_char = ", " if i < len(no_result_name) - 1 else ""
                 print(name, end=end_char)
-                write_content_into_txt(f"{name},url", path)
+                write_content_into_txt(f"\n{name},url", path)
             print()
+        if config.open_update_time:
+            now = datetime.datetime.now()
+            if os.environ.get("GITHUB_ACTIONS"):
+                now += datetime.timedelta(hours=8)
+            update_time = now.strftime("%Y-%m-%d %H:%M:%S")
+            update_time_url = next(
+                (get_total_urls(info_list, ipv_type_prefer, origin_type_prefer)[0]
+                 for channel_obj in data.values()
+                 for info_list in channel_obj.values() if info_list),
+                "url"
+            )
+            update_time_position = config.update_time_position
+            write_content_into_txt(
+                f"{'\n\n' if update_time_position == 'bottom' else ''}🕘️更新时间,#genre#\n{update_time},{update_time_url}{'\n' if update_time_position == 'top' else ''}",
+                path,
+                position=update_time_position)
     except Exception as e:
         print(f"❌ Write channel to file failed: {e}")
 

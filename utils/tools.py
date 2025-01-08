@@ -499,16 +499,19 @@ def resource_path(relative_path, persistent=False):
             return total_path
 
 
-def write_content_into_txt(content, path=None, newline=True, callback=None):
+def write_content_into_txt(content, path=None, position=None, callback=None):
     """
     Write content into txt file
     """
     if not path:
         return
 
-    with open(path, "a", encoding="utf-8") as f:
-        if newline:
-            f.write(f"\n{content}")
+    mode = "r+" if position == "top" else "a"
+    with open(path, mode, encoding="utf-8") as f:
+        if position == "top":
+            existing_content = f.read()
+            f.seek(0, 0)
+            f.write(f"{content}\n{existing_content}")
         else:
             f.write(content)
 

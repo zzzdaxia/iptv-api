@@ -292,6 +292,19 @@ class DefaultUI:
         )
         self.open_update_time_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
+        self.update_time_position_label = tk.Label(
+            frame_default_open_update_info_column1, text="位置:", width=3
+        )
+        self.update_time_position_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.update_time_position_combo = ttk.Combobox(frame_default_open_update_info_column1, width=5)
+        self.update_time_position_combo.pack(side=tk.LEFT, padx=4, pady=8)
+        self.update_time_position_combo["values"] = ("顶部", "底部")
+        if config.update_time_position == "bottom":
+            self.update_time_position_combo.current(1)
+        else:
+            self.update_time_position_combo.current(0)
+        self.update_time_position_combo.bind("<<ComboboxSelected>>", self.update_update_time_position)
+
         self.open_url_info_label = tk.Label(
             frame_default_open_update_info_column2, text="显示接口信息:", width=12
         )
@@ -450,6 +463,10 @@ class DefaultUI:
     def update_ipv_type(self, event):
         config.set("Settings", "ipv_type", self.ipv_type_combo.get())
 
+    def update_update_time_position(self, event):
+        config.set("Settings", "update_time_position",
+                   'bottom' if self.update_time_position_combo.get() == '底部' else 'top')
+
     def edit_whitelist_file(self):
         path = resource_path(constants.whitelist_path)
         if os.path.exists(path):
@@ -478,6 +495,7 @@ class DefaultUI:
             "open_keep_all_checkbutton",
             "open_m3u_result_checkbutton",
             "urls_limit_entry",
+            "update_time_position_combo",
             "open_update_time_checkbutton",
             "open_url_info_checkbutton",
             "open_empty_category_checkbutton",
