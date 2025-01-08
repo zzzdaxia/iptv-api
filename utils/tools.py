@@ -1,5 +1,6 @@
 import datetime
 import ipaddress
+import json
 import logging
 import os
 import re
@@ -592,3 +593,11 @@ def get_datetime_now():
     now = datetime.datetime.now()
     time_zone = pytz.timezone(config.time_zone)
     return now.astimezone(time_zone).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_version_info():
+    """
+    Get the version info
+    """
+    with open(resource_path("version.json"), "r", encoding="utf-8") as f:
+        return json.load(f)

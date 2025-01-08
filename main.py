@@ -30,7 +30,8 @@ from utils.tools import (
     format_interval,
     check_ipv6_support,
     resource_path,
-    get_urls_from_file
+    get_urls_from_file,
+    get_version_info
 )
 
 
@@ -212,6 +213,8 @@ class UpdateSource:
 
 
 if __name__ == "__main__":
+    info = get_version_info()
+    print(f"ℹ️ {info['name']} Version: {info['version']}")
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     update_source = UpdateSource()

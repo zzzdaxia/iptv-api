@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from utils.config import config
-from utils.tools import resource_path
+from utils.tools import resource_path, get_version_info
 from main import UpdateSource
 import asyncio
 import threading
@@ -19,14 +19,12 @@ from multicast import MulticastUI
 from hotel import HotelUI
 from subscribe import SubscribeUI
 from online_search import OnlineSearchUI
-import json
 from utils.speed import check_ffmpeg_installed_status
 
 
 class TkinterUI:
     def __init__(self, root):
-        with open(resource_path("version.json"), "r", encoding="utf-8") as f:
-            info = json.load(f)
+        info = get_version_info()
         self.root = root
         self.root.title(info.get("name", ""))
         self.version = info.get("version", "")
