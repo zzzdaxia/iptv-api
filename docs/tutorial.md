@@ -241,7 +241,7 @@ pipenv run dev
 pipenv run service
 ```
 
-### GUI 软件
+## GUI 软件
 
 1. 下载[IPTV-API 更新软件](https://github.com/Guovin/iptv-api/releases)，打开软件，点击更新，即可完成更新
 
