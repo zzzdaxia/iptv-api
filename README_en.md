@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">A highly customizable IPTV interface update project 📺, with customizable channel menus, automatic live stream acquisition, speed testing, and validation to generate usable results, achieving 『✨instant playback experience🚀』</div>
-
+<br>
 <p align="center">
   <a href="https://github.com/Guovin/iptv-api/releases/latest">
     <img src="https://img.shields.io/github/v/release/guovin/iptv-api" />
