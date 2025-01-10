@@ -40,7 +40,7 @@
 - [📣 Disclaimer](#disclaimer)
 - [⚖️ License](#license)
 
-📍Default subscription sources are from:
+📍Subscription sources are from:
 
 - [iptv-org/iptv](https://github.com/iptv-org/iptv)
 - [suxuang/myIPTV](https://github.com/suxuang/myIPTV)
@@ -261,11 +261,11 @@ Port environment variables:
 
 3. Update results:
 
-- API address: ip:8000
-- M3u api：ip:8000/m3u
-- Txt api：ip:8000/txt
-- API content: ip:8000/content
-- Speed test log: ip:8000/log
+- API address: `ip:8000`
+- m3u api：`ip:8000/m3u`
+- txt api：`ip:8000/txt`
+- API content: `ip:8000/content`
+- Speed test log: `ip:8000/log`
 
 ## Changelog
 

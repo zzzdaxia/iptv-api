@@ -40,7 +40,7 @@
 - [📣 免责声明](#免责声明)
 - [⚖️ 许可证](#许可证)
 
-📍默认订阅源来自：
+📍订阅源来自：
 
 - [iptv-org/iptv](https://github.com/iptv-org/iptv)
 - [suxuang/myIPTV](https://github.com/suxuang/myIPTV)
@@ -254,11 +254,11 @@ docker run -v /etc/docker/config:/iptv-api-lite/config -v /etc/docker/output:/ip
 
 3. 更新结果：
 
-- 接口地址：ip:8000
-- M3u 接口：ip:8000/m3u
-- Txt 接口：ip:8000/txt
-- 接口内容：ip:8000/content
-- 测速日志：ip:8000/log
+- 接口地址：`ip:8000`
+- m3u 接口：`ip:8000/m3u`
+- txt 接口：`ip:8000/txt`
+- 接口内容：`ip:8000/content`
+- 测速日志：`ip:8000/log`
 
 ## 更新日志
 
